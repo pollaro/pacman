@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pacman</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var world = [
+                [2,2,2,2,2,2,2,2,2,2,2,2],
+                [2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,2,2,2,2,1,1,1,2],
+                [2,1,1,1,2,2,2,2,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,2,2,2,2,2,2,2,2,2,2,2]
+            ];
+
+            var pacman = {
+                x: 1,
+                y: 1
+            };
+
+            function displayWorld(){
+                var output = '';
+                for (var x = 0; x < world.length; x++) {
+                    output += '<div class="row">'
+                    for (var y = 0; y < world[x].length; y++) {
+                        if (world[x][y]==2) {
+                            output += '<div class="brick"></div>'}
+                        else if (world[x][y]==1) {
+                            output +='<div class="coin"></div>'}
+                        if (world[x][y]==0) {
+                            output +='<div class="empty"></div>'}
+                        }
+                    output += '</div>'
+                }
+                // console.log(output);
+                $('#world').html(output)
+            }
+            function displayPacman(){
+                document.getElementById('pacman').style.top = pacman.y*20+'px';
+                document.getElementById('pacman').style.left = pacman.x*20+'px';
+            }
+
+            displayWorld();
+            displayPacman();
+
+            document.onkeydown=function(e){
+                if(e.keyCode==37 && world[pacman.x-1][pacman.y]!=2){
+                    pacman.x--;
+                }
+                else if (e.keyCode==40 && world[pacman.x][pacman.y+1]!=2) {
+                    pacman.y++;
+                }
+                else if (e.keyCode==39 && world[pacman.x+1][pacman.y]!=2) {
+                    pacman.x++;
+                }
+                else if (e.keyCode==38 && world[pacman.x][pacman.y-1]!=2) {
+                    pacman.y--;
+                }
+                // console.log(e.keyCode);
+
+
+                // console.log(world[pacman.x][pacman.y])
+                if (world[pacman.x][pacman.y]==1){
+                    world[pacman.x][pacman.y]=0
+                    displayWorld();
+                }
+                displayPacman();
+            }
+        })
+    </script>
+
+    <body>
+
+        <div id="world"></div>
+        <div id="pacman"></div>
+
+    </body>
+</html>
