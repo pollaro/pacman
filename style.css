@@ -48,5 +48,26 @@ body{
     top: 20px;
     left: 20px;
     margin: -2px;
+}
 
+#score{
+    text-align: center;
+    color: white;
+    display: inline-block;
+    border: white thin solid;
+    padding: 20px;
+}
+
+#cherries{
+    height: 20px;
+    width: 20px;
+    display:none;
+    margin: -2px;
+    background: url('cherry.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

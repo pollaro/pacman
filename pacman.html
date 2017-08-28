@@ -9,22 +9,40 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+
+            var timeStart = Date.now();
+            var time = Math.random()*6000+1000;
+
             var world = [
-                [2,2,2,2,2,2,2,2,2,2,2,2],
-                [2,1,1,1,1,1,1,1,1,1,1,2],
-                [2,1,1,1,1,1,1,1,1,1,1,2],
-                [2,1,1,1,1,1,1,1,1,1,1,2],
-                [2,1,1,1,2,2,2,2,1,1,1,2],
-                [2,1,1,1,2,2,2,2,1,1,1,2],
-                [2,1,1,1,1,1,1,1,1,1,1,2],
-                [2,1,1,1,1,1,1,1,1,1,1,2],
-                [2,2,2,2,2,2,2,2,2,2,2,2]
+                [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                [2,0,1,1,1,1,1,1,1,1,1,1,2,2,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,2,2,2,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,2,2,2,1,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,2,2,2,1,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,2,2,2,1,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,2,2,1,1,1,1,1,1,1,1,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,2],
+                [2,1,1,1,1,1,1,1,1,1,1,1,2,2,1,1,2],
+                [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
             ];
 
             var pacman = {
                 x: 1,
                 y: 1
             };
+
+            var score = 0;
+
+            var cherry = {
+                x:0,
+                y:0
+            }
 
             function displayWorld(){
                 var output = '';
@@ -48,21 +66,52 @@
                 document.getElementById('pacman').style.left = pacman.x*20+'px';
             }
 
+            function displayScore(){
+                $('#score').html(score)
+            }
+
+            // while (world[cherry.x][cherry.y]==2){
+            //     cherry.x = Math.floor(Math.random()*10);
+            //     cherry.y = Math.floor(Math.random()*10);
+            // }
+            // var time = Math.random()*7000;
+            // console.log(time);
+            // document.getElementById('cherries').style.top = cherry.y*20+'px';
+            // document.getElementById('cherries').style.left = cherry.x*20+'px';
+
+            function displayCherry(){
+                while (world[cherry.x][cherry.y]==2){
+                    cherry.x = Math.floor(Math.random()*10);
+                    cherry.y = Math.floor(Math.random()*10);
+                }
+                // var time = Math.random()*6000+1000;
+                console.log(time);
+                document.getElementById('cherries').style.top = cherry.y*20+'px';
+                document.getElementById('cherries').style.left = cherry.x*20+'px';
+                $('#cherries').delay(time).fadeIn();
+            }
+
             displayWorld();
             displayPacman();
+            displayScore();
+            displayCherry();
 
             document.onkeydown=function(e){
                 if(e.keyCode==37 && world[pacman.x-1][pacman.y]!=2){
                     pacman.x--;
+                    $('#pacman').css({'transform':'rotate(180deg)'})
                 }
                 else if (e.keyCode==40 && world[pacman.x][pacman.y+1]!=2) {
                     pacman.y++;
+                    $('#pacman').css({'transform':'rotate(90deg)'})
                 }
                 else if (e.keyCode==39 && world[pacman.x+1][pacman.y]!=2) {
                     pacman.x++;
+                    $('#pacman').css({'transform':'rotate(0deg)'})
                 }
                 else if (e.keyCode==38 && world[pacman.x][pacman.y-1]!=2) {
                     pacman.y--;
+                    $('#pacman').css({'transform':'rotate(-90deg)'})
                 }
                 // console.log(e.keyCode);
 
@@ -70,7 +119,16 @@
                 // console.log(world[pacman.x][pacman.y])
                 if (world[pacman.x][pacman.y]==1){
                     world[pacman.x][pacman.y]=0
+                    score+=10;
                     displayWorld();
+                    displayScore();
+                }
+                if ((timeStart+time)>(Date.now()-timeStart)){
+                    if(pacman.x == cherry.x && pacman.y == cherry.y && $('#cherries').css('display')!='none'){
+                        score+=50;
+                        $('#cherries').hide();
+                        displayScore();
+                    }
                 }
                 displayPacman();
             }
@@ -80,7 +138,9 @@
     <body>
 
         <div id="world"></div>
+        <div id="score"></div>
         <div id="pacman"></div>
+        <div id="cherries"></div>
 
     </body>
 </html>
